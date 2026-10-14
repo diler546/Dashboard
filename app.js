@@ -330,14 +330,13 @@ function steamSave() {
   }
 }
 
+const PROXY_BASE = 'https://steam-proxy.makar912.workers.dev';
+
 async function steamSearch(term) {
-  const targetUrl = 'https://store.steampowered.com/api/storesearch/'
+  const target = 'https://store.steampowered.com/api/storesearch/'
     + '?term=' + encodeURIComponent(term) + '&l=ru&cc=RU';
 
-  // AllOrigins в режиме raw — возвращает тело ответа без обёртки
- const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(targetUrl);
-
-  const res = await fetch(proxyUrl);
+  const res = await fetch(PROXY_BASE + '/?url=' + encodeURIComponent(target));
   if (!res.ok) throw new Error('HTTP ' + res.status);
 
   const data = await res.json();
@@ -346,26 +345,17 @@ async function steamSearch(term) {
 
 
 async function steamPlayers(appid) {
-  try {
-    const res = await fetch(STEAM_COUNT + '?appid=' + appid);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
+  const target = 'https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/'
+    + '?appid=' + appid;
 
-    const data = await res.json();
-    const count = data && data.response ? data.response.player_count : null;
-    if (typeof count === 'number') return count;
+  const res = await fetch(PROXY_BASE + '/?url=' + encodeURIComponent(target));
+  if (!res.ok) throw new Error('HTTP ' + res.status);
 
-    throw new Error('no player_count');
-  } catch (primaryError) {
-    // Фолбэк: SteamSpy отдаёт ccu (текущий онлайн)
-    const res = await fetch(STEAM_SPY + '?request=appdetails&appid=' + appid);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
+  const data = await res.json();
+  const count = data && data.response ? data.response.player_count : null;
+  if (typeof count !== 'number') throw new Error('no player_count');
 
-    const data = await res.json();
-    const ccu = Number(data && data.ccu);
-    if (Number.isFinite(ccu)) return ccu;
-
-    throw primaryError;
-  }
+  return count;
 }
 
 function steamFootUpdate() {
