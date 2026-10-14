@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Панель инди-разработчика игр</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="header">
+  <h1 class="header__title">Панель инди-разработчика игр</h1>
+  <p class="header__sub">собрано вручную, без фреймворков</p>
+</header>
+
+<main class="grid">
+
+  <!-- ============ 1. GitHub ============ -->
+  <section class="card card--wide" aria-labelledby="gh-title">
+    <div class="card__head">
+      <h2 id="gh-title" class="card__title">Тренды GitHub</h2>
+      <span class="card__hint">C# · по звёздам</span>
+    </div>
+
+    <form class="toolbar" id="gh-form">
+      <label class="sr-only" for="gh-query">Поисковый запрос по репозиториям</label>
+      <input type="text" id="gh-query" name="query" placeholder="например: ecs" autocomplete="off" spellcheck="false">
+
+      <label class="sr-only" for="gh-tag">Тег</label>
+      <select id="gh-tag" name="tag">
+        <option value="unity">unity</option>
+        <option value="csharp">csharp</option>
+        <option value="game-development">game-development</option>
+        <option value="ink">ink</option>
+      </select>
+
+      <button type="submit" class="btn">Найти</button>
+    </form>
+
+    <p class="status" id="gh-status" role="status" aria-live="polite"></p>
+    <div class="gh-list" id="gh-list"></div>
+    <p class="card__foot" id="gh-foot">GitHub Search API · обновлено —</p>
+  </section>
+
+  <!-- ============ 2. Hacker News ============ -->
+  <section class="card" aria-labelledby="hn-title">
+    <div class="card__head">
+      <h2 id="hn-title" class="card__title">Новости технологий</h2>
+      <button type="button" class="btn btn--ghost" id="hn-refresh">Обновить</button>
+    </div>
+
+    <p class="status" id="hn-status" role="status" aria-live="polite"></p>
+    <div class="news-list" id="hn-list"></div>
+    <p class="card__foot" id="hn-foot">Hacker News API · обновлено —</p>
+  </section>
+
+  <!-- ============ 3. Unity Releases ============ -->
+  <section class="card" aria-labelledby="unity-title">
+    <div class="card__head">
+      <h2 id="unity-title" class="card__title">Релизы Unity</h2>
+      <button type="button" class="btn btn--ghost" id="unity-refresh">Проверить</button>
+    </div>
+
+    <p class="status" id="unity-status" role="status" aria-live="polite"></p>
+    <div class="release-list" id="unity-list"></div>
+    <p class="card__foot" id="unity-foot">Unity Release API · обновлено —</p>
+  </section>
+
+  <!-- ============ 4. Steam ============ -->
+  <section class="card card--wide" aria-labelledby="steam-title">
+    <div class="card__head">
+      <h2 id="steam-title" class="card__title">Онлайн в Steam</h2>
+      <button type="button" class="btn btn--ghost" id="steam-refresh">Обновить всё</button>
+    </div>
+
+    <form class="toolbar" id="steam-form">
+      <label class="sr-only" for="steam-input">Название игры в Steam</label>
+      <input type="text" id="steam-input" placeholder="название игры, не AppID" autocomplete="off" spellcheck="false">
+      <button type="submit" class="btn">Добавить</button>
+    </form>
+
+    <p class="status" id="steam-status" role="status" aria-live="polite"></p>
+    <div class="steam-list" id="steam-list"></div>
+    <p class="card__foot" id="steam-foot">Steam Web API (Store Search, GetNumberOfCurrentPlayers) · обновлено —</p>
+  </section>
+
+  <!-- ============ 5. Kanban ============ -->
+  <section class="card card--full" aria-labelledby="kb-title">
+    <div class="card__head">
+      <h2 id="kb-title" class="card__title">Задачи проекта</h2>
+      <span class="card__hint">localStorage</span>
+    </div>
+
+    <div class="kanban">
+      <section class="kanban__col" aria-labelledby="kb-todo">
+        <header class="kanban__head">
+          <h3 id="kb-todo" class="kanban__title">To Do</h3>
+          <button type="button" class="btn btn--icon" data-add="todo" aria-label="Добавить задачу в To Do">+</button>
+        </header>
+        <ul class="kanban__list" data-list="todo"></ul>
+      </section>
+
+      <section class="kanban__col" aria-labelledby="kb-doing">
+        <header class="kanban__head">
+          <h3 id="kb-doing" class="kanban__title">Doing</h3>
+          <button type="button" class="btn btn--icon" data-add="doing" aria-label="Добавить задачу в Doing">+</button>
+        </header>
+        <ul class="kanban__list" data-list="doing"></ul>
+      </section>
+
+      <section class="kanban__col" aria-labelledby="kb-done">
+        <header class="kanban__head">
+          <h3 id="kb-done" class="kanban__title">Done</h3>
+          <button type="button" class="btn btn--icon" data-add="done" aria-label="Добавить задачу в Done">+</button>
+        </header>
+        <ul class="kanban__list" data-list="done"></ul>
+      </section>
+    </div>
+
+    <p class="card__foot">Локальный виджет · данные в localStorage</p>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>Панель инди-разработчика · собрано вручную, без фреймворков и сборки.</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
