@@ -2,133 +2,153 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Панель инди-разработчика игр</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header class="header">
-  <h1 class="header__title">Панель инди-разработчика игр</h1>
-  <p class="header__sub">собрано вручную, без фреймворков</p>
+<header class="site-header">
+  <div class="site-header__inner">
+    <div class="brand">
+      <div class="brand__mark"><span>◈</span></div>
+      <div>
+        <strong>Панель инди-разработчика</strong>
+      </div>
+    </div>
+    <div class="status">
+      <span class="status__dot" aria-hidden="true"></span>
+      <span id="global-status">ожидание</span>
+    </div>
+  </div>
 </header>
 
-<main class="grid">
+<main class="container">
+  <div class="widgets-grid" id="widgets-grid">
 
-  <!-- ============ 1. GitHub ============ -->
-  <section class="card card--wide" aria-labelledby="gh-title">
-    <div class="card__head">
-      <h2 id="gh-title" class="card__title">Тренды GitHub</h2>
-      <span class="card__hint">C# · по звёздам</span>
-    </div>
+    <section class="widget" id="widget-github" aria-labelledby="w1">
+      <header class="widget__head" draggable="true">
+        <span class="widget__num">01</span>
+        <h2 class="widget__title" id="w1">Тренды GitHub</h2>
+        <div class="widget__actions">
+          <button class="btn btn--secondary" type="button" id="gh-refresh">Обновить</button>
+        </div>
+      </header>
+      <form class="row-form" id="gh-form">
+        <input type="search" id="gh-query" placeholder="Поиск по репозиториям…" autocomplete="off">
+        <select id="gh-tag" aria-label="Тег">
+          <option value="unity">unity</option>
+          <option value="csharp">csharp</option>
+          <option value="game-development">game-development</option>
+          <option value="ink">ink</option>
+          <option value="shader">shader</option>
+        </select>
+        <button class="btn btn--primary" type="submit">Найти</button>
+      </form>
+      <div id="gh-list"></div>
+      <div class="state" id="gh-status" data-kind="loading">Тянем данные…</div>
+      <footer class="widget__foot">
+        <span>GitHub Search API</span>
+        <span id="gh-foot">—</span>
+      </footer>
+    </section>
 
-    <form class="toolbar" id="gh-form">
-      <label class="sr-only" for="gh-query">Поисковый запрос по репозиториям</label>
-      <input type="text" id="gh-query" name="query" placeholder="например: ecs" autocomplete="off" spellcheck="false">
+    <section class="widget" id="widget-news" aria-labelledby="w2">
+      <header class="widget__head" draggable="true">
+        <span class="widget__num">02</span>
+        <h2 class="widget__title" id="w2">Новости технологий</h2>
+        <div class="widget__actions">
+          <button class="btn btn--secondary" type="button" id="hn-refresh">Обновить</button>
+        </div>
+      </header>
+      <div id="hn-list"></div>
+      <div class="state" id="hn-status" data-kind="loading">Тянем данные…</div>
+      <footer class="widget__foot">
+        <span>Hacker News API</span>
+        <span id="hn-foot">—</span>
+      </footer>
+    </section>
 
-      <label class="sr-only" for="gh-tag">Тег</label>
-      <select id="gh-tag" name="tag">
-        <option value="unity">unity</option>
-        <option value="csharp">csharp</option>
-        <option value="game-development">game-development</option>
-        <option value="ink">ink</option>
-      </select>
+    <section class="widget" id="widget-unity" aria-labelledby="w3">
+      <header class="widget__head" draggable="true">
+        <span class="widget__num">03</span>
+        <h2 class="widget__title" id="w3">Релизы Unity</h2>
+        <div class="widget__actions">
+          <button class="btn btn--secondary" type="button" id="unity-refresh">Проверить</button>
+        </div>
+      </header>
+      <div id="unity-list"></div>
+      <div class="state" id="unity-status" data-kind="loading">Тянем данные…</div>
+      <footer class="widget__foot">
+        <span>Unity Release API</span>
+        <span id="unity-foot">—</span>
+      </footer>
+    </section>
 
-      <button type="submit" class="btn">Найти</button>
-    </form>
+    <section class="widget" id="widget-steam" aria-labelledby="w4">
+      <header class="widget__head" draggable="true">
+        <span class="widget__num">04</span>
+        <h2 class="widget__title" id="w4">Онлайн в Steam</h2>
+        <div class="widget__actions">
+          <button class="btn btn--secondary" type="button" id="steam-refresh">Обновить</button>
+        </div>
+      </header>
+      <form class="row-form" id="steam-form">
+        <input type="text" id="steam-input" placeholder="Например: Dota 2" autocomplete="off">
+        <button class="btn btn--primary" type="submit">Добавить</button>
+      </form>
+      <div id="steam-list"></div>
+      <div class="state" id="steam-status" data-kind=""></div>
+      <footer class="widget__foot">
+        <span id="steam-foot">—</span>
+      </footer>
+    </section>
 
-    <p class="status" id="gh-status" role="status" aria-live="polite"></p>
-    <div class="gh-list" id="gh-list"></div>
-    <p class="card__foot" id="gh-foot">GitHub Search API · обновлено —</p>
-  </section>
+  </div>
 
-  <!-- ============ 2. Hacker News ============ -->
-  <section class="card" aria-labelledby="hn-title">
-    <div class="card__head">
-      <h2 id="hn-title" class="card__title">Новости технологий</h2>
-      <button type="button" class="btn btn--ghost" id="hn-refresh">Обновить</button>
-    </div>
-
-    <p class="status" id="hn-status" role="status" aria-live="polite"></p>
-    <div class="news-list" id="hn-list"></div>
-    <p class="card__foot" id="hn-foot">Hacker News API · обновлено —</p>
-  </section>
-
-  <!-- ============ 3. Unity Releases ============ -->
-  <section class="card" aria-labelledby="unity-title">
-    <div class="card__head">
-      <h2 id="unity-title" class="card__title">Релизы Unity</h2>
-      <button type="button" class="btn btn--ghost" id="unity-refresh">Проверить</button>
-    </div>
-
-    <p class="status" id="unity-status" role="status" aria-live="polite"></p>
-    <div class="release-list" id="unity-list"></div>
-    <p class="card__foot" id="unity-foot">Unity Release API · обновлено —</p>
-  </section>
-
-  <!-- ============ 4. Steam ============ -->
-  <section class="card card--wide" aria-labelledby="steam-title">
-    <div class="card__head">
-      <h2 id="steam-title" class="card__title">Онлайн в Steam</h2>
-      <button type="button" class="btn btn--ghost" id="steam-refresh">Обновить всё</button>
-    </div>
-
-    <form class="toolbar" id="steam-form">
-      <label class="sr-only" for="steam-input">Название игры в Steam</label>
-      <input type="text" id="steam-input" placeholder="название игры, не AppID" autocomplete="off" spellcheck="false">
-      <button type="submit" class="btn">Добавить</button>
-    </form>
-
-    <p class="status" id="steam-status" role="status" aria-live="polite"></p>
-    <div class="steam-list" id="steam-list"></div>
-    <p class="card__foot" id="steam-foot">Steam Web API (Store Search, GetNumberOfCurrentPlayers) · обновлено —</p>
-  </section>
-
-  <!-- ============ 5. Kanban ============ -->
-  <section class="card card--full" aria-labelledby="kb-title">
-    <div class="card__head">
-      <h2 id="kb-title" class="card__title">Задачи проекта</h2>
-      <span class="card__hint">localStorage</span>
-    </div>
-
-    <div class="kanban">
-      <section class="kanban__col" aria-labelledby="kb-todo">
-        <header class="kanban__head">
-          <h3 id="kb-todo" class="kanban__title">To Do</h3>
-          <button type="button" class="btn btn--icon" data-add="todo" aria-label="Добавить задачу в To Do">+</button>
-        </header>
+  <section class="widget widget--wide" id="widget-kanban" aria-labelledby="w5">
+    <header class="widget__head" draggable="true">
+      <span class="widget__num">05</span>
+      <h2 class="widget__title" id="w5">Задачи проекта</h2>
+    </header>
+    <div class="kanban" id="kanban">
+      <div class="kanban__col" data-col="todo">
+        <div class="kanban__col-head">
+          <h3 class="kanban__col-title">To Do</h3>
+          <span class="kanban__count" data-count="todo">0</span>
+        </div>
         <ul class="kanban__list" data-list="todo"></ul>
-      </section>
-
-      <section class="kanban__col" aria-labelledby="kb-doing">
-        <header class="kanban__head">
-          <h3 id="kb-doing" class="kanban__title">Doing</h3>
-          <button type="button" class="btn btn--icon" data-add="doing" aria-label="Добавить задачу в Doing">+</button>
-        </header>
+        <button class="btn btn--ghost kanban__add" type="button" data-add="todo">+ Задача</button>
+      </div>
+      <div class="kanban__col" data-col="doing">
+        <div class="kanban__col-head">
+          <h3 class="kanban__col-title">Doing</h3>
+          <span class="kanban__count" data-count="doing">0</span>
+        </div>
         <ul class="kanban__list" data-list="doing"></ul>
-      </section>
-
-      <section class="kanban__col" aria-labelledby="kb-done">
-        <header class="kanban__head">
-          <h3 id="kb-done" class="kanban__title">Done</h3>
-          <button type="button" class="btn btn--icon" data-add="done" aria-label="Добавить задачу в Done">+</button>
-        </header>
+        <button class="btn btn--ghost kanban__add" type="button" data-add="doing">+ Задача</button>
+      </div>
+      <div class="kanban__col" data-col="done">
+        <div class="kanban__col-head">
+          <h3 class="kanban__col-title">Done</h3>
+          <span class="kanban__count" data-count="done">0</span>
+        </div>
         <ul class="kanban__list" data-list="done"></ul>
-      </section>
+        <button class="btn btn--ghost kanban__add" type="button" data-add="done">+ Задача</button>
+      </div>
     </div>
-
-    <p class="card__foot">Локальный виджет · данные в localStorage</p>
+    <footer class="widget__foot">
+      <span>Локальный виджет · данные в localStorage</span>
+      <span>перетаскивай карточки мышкой между колонками</span>
+    </footer>
   </section>
-
 </main>
 
-<footer class="footer">
-  <p>Панель инди-разработчика · собрано вручную, без фреймворков и сборки.</p>
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <span><b>© 2026</b> Панель инди-разработчика</span>
+    <span>GitHub · Hacker News · Unity · Steam</span>
+  </div>
 </footer>
 
 <script src="app.js"></script>
